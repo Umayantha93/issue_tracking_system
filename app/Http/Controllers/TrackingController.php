@@ -112,4 +112,22 @@ class TrackingController extends Controller
             "data" => $data
         ]);
     }
+
+    public function deleteIssue($id) {
+            
+        $data = TrackingRepository::deleteIssue($id);
+
+        return response()->json([
+            "message" => "Successfully Deleted"
+        ]);
+    }
+
+    public function deleteComment($id) {
+
+        $data = TrackingRepository::removeComment($id);
+
+        return response()->json([
+            "message" => "Comment Successfully Deleted"
+        ]);
+    }
 }

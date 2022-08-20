@@ -137,7 +137,7 @@ class TrackingRepository{
             ->where('issue_id', '=', $id)
             ->where('imagable_type', '=', "comments")
             ->get();
-            
+
     return response()->json([
         "issues_table" => $issues,
         "issue_images" => $issue_images,
@@ -146,6 +146,46 @@ class TrackingRepository{
         
     ]);
    }
+
+   public static function deleteIssue($id) {
+    $issues = DB::table('issues')
+        ->leftjoin('issue_categories', 'issues.id', '=', 'issue_categories.issue_id')
+        ->leftjoin('issue_subcategories', 'issues.id', '=', 'issue_categories.issue_id')
+        ->leftjoin('categories', 'categories.id', '=', 'issue_categories.category_id')
+        ->leftjoin('subcategories', 'subcategories.id', '=', 'issue_subcategories.subcategory_id')
+        ->leftjoin('comments', 'issues.id', '=', 'comments.issue_id')
+        ->select('issues.*', 'issue_categories.*','comments.*', 'issue_subcategories.*')
+        ->where('issues.id','=', $id)
+        ->delete();
+
+        $issue_images = DB::table('images')
+        ->select('images.*')
+        ->where('imagable_id', '=', $id)
+        ->where('imagable_type', '=', "issues")
+        ->delete();
+
+        $comment_images = DB::table('images')
+        ->leftjoin('comments', 'images.imagable_id', '=', 'comments.id')
+        ->select('images.*')
+        ->where('issue_id', '=', $id)
+        ->where('imagable_type', '=', "comments")
+        ->delete();
+
+    }
+
+    public static function removeComment($id) {
+
+        $comments = DB::table('comments')
+        ->select('comments.*')
+        ->where('id','=', $id)
+        ->delete();
+
+        $comment_images = DB::table('images')
+        ->select('images.*')
+        ->where('imagable_id', '=', $id)
+        ->where('imagable_type', '=', "comments")
+        ->delete();
+    }
 
 }
 
