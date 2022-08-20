@@ -41,18 +41,18 @@ class TrackingRepository{
         'uuid' => $request->uuid,
         'slug' => $request->slug,
     ]);
-
+    $id = $issue->id;
     $issue_category = IssueCategory::create([
-        'issue_id' => $issue->id,
+        'issue_id' => $id,
         'category_id' => $request->category_id,
     ]);
 
     $issue_subcategory = IssueSubcategory::create([
-        'issue_id' => $issue->id,
+        'issue_id' => $id,
         'subcategory_id' => $request->subcategory_id,
     ]);
 
-    $id = $issue->id;
+    
     if($images = $request->file('images')) {
         foreach($images as $image) {
             $name = $image->getClientOriginalName();
