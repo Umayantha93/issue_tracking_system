@@ -97,6 +97,55 @@ class TrackingRepository{
         }
    }
 
+   public static function getIssues() {
+    
+    $issues = DB::table('issues')
+            ->join('issue_categories', 'issues.id', '=', 'issue_categories.issue_id')
+            ->join('issue_subcategories', 'issues.id', '=', 'issue_categories.issue_id')
+            ->join('categories', 'categories.id', '=', 'issue_categories.category_id')
+            ->join('subcategories', 'subcategories.id', '=', 'issue_subcategories.subcategory_id')
+            ->select('issues.*', 'categories.name as category_name', 'subcategories.name as sub_category_name')
+            ->get();
+
+    return $issues;
+   }
+
+   public static function getIssue($id) {
+    $issues = DB::table('issues')
+        ->leftjoin('issue_categories', 'issues.id', '=', 'issue_categories.issue_id')
+        ->leftjoin('issue_subcategories', 'issues.id', '=', 'issue_categories.issue_id')
+        ->leftjoin('categories', 'categories.id', '=', 'issue_categories.category_id')
+        ->leftjoin('subcategories', 'subcategories.id', '=', 'issue_subcategories.subcategory_id')
+        ->select('issues.*', 'categories.name as category_name', 'subcategories.name as sub_category_name')      
+        ->where('issues.id','=', $id)
+        ->get();
+
+        $issue_images = DB::table('images')
+            ->select('images.imagable_type', 'images.imagable_id', 'images.path')
+            ->where('imagable_id', '=', $id)
+            ->where('imagable_type', '=', "issues")
+            ->get();
+
+        $comments = DB::table('comments')
+            ->select('comments.id','comments.body')
+            ->where('issue_id','=', $id)
+            ->get();
+        
+        $comment_images = DB::table('images')
+            ->leftjoin('comments', 'images.imagable_id', '=', 'comments.id')
+            ->select('images.imagable_type', 'images.imagable_id', 'images.path')
+            ->where('issue_id', '=', $id)
+            ->where('imagable_type', '=', "comments")
+            ->get();
+            
+    return response()->json([
+        "issues_table" => $issues,
+        "issue_images" => $issue_images,
+        "comments_table" => $comments,
+        "comment_images" => $comment_images
+        
+    ]);
+   }
 
 }
 

@@ -93,6 +93,23 @@ class TrackingController extends Controller
                 'message' => "Validation Fails"
             ]);       
         }
-
     }  
+
+    public function listIssues(){
+
+        $data = TrackingRepository::getIssues();
+
+        return response()->json([
+            "data" => $data
+        ]);
+    }
+
+    public function selectIssue($id) {
+    
+        $data = TrackingRepository::getIssue($id);
+
+        return response()->json([
+            "data" => $data
+        ]);
+    }
 }

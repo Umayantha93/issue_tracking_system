@@ -21,6 +21,9 @@ Route::post('create-subcategory', [TrackingController::class, 'createSubcategory
 Route::post('create-issue', [TrackingController::class, 'createIssue']);
 Route::post('create-comment', [TrackingController::class, 'createComment']);
 
+Route::get('list-issues', [TrackingController::class, 'listIssues']);
+Route::get('select-issue/{id}', [TrackingController::class, 'selectIssue']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
