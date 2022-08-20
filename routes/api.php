@@ -19,6 +19,7 @@ Route::post('create-category', [TrackingController::class, 'createCategory']);
 Route::post('create-subcategory', [TrackingController::class, 'createSubcategory']);
 
 Route::post('create-issue', [TrackingController::class, 'createIssue']);
+Route::post('create-comment', [TrackingController::class, 'createComment']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

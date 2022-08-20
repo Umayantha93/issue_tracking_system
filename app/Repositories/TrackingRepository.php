@@ -72,6 +72,31 @@ class TrackingRepository{
     }
    }
 
+   public static function postComment($request){
+    $comment = Comment::create([
+        'issue_id' => $request->issue_id,
+        'body' => $request->body,
+    ]);
+        $id = $comment->id;
+        if($images = $request->file('images')) {
+            foreach($images as $image) {
+                $name = $image->getClientOriginalName();
+                $path = $image->storeAs('uploads', $name, 'public');
+                $imageextension = $image->getClientOriginalExtension();
+                $imagesize = $image->getSize();
+
+                $create = Image::create([
+                    'name' => $name,
+                    'path' => '/storage/'.$path,
+                    'imagable_type' => "comments",
+                    'imagable_id'=> $id,
+                    'size' => $imagesize,
+                    'extension' => $imageextension,
+                ]);
+            }
+        }
+   }
+
 
 }
 

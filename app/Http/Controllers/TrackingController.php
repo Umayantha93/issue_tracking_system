@@ -73,4 +73,26 @@ class TrackingController extends Controller
         }
         
     }
+
+    //create a comment
+    public function createComment(Request $request) 
+    {
+            $request->validate([
+            'issue_id' => 'required',
+            'body' => 'required'
+        ]);
+        if ($request) {
+
+            $data = TrackingRepository::postComment($request);
+
+            return response()->json([
+                'message' => "Comment Entered Successfully"
+            ]);
+        } else {
+            return response()->json([
+                'message' => "Validation Fails"
+            ]);       
+        }
+
+    }  
 }
