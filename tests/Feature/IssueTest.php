@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Issue;
+use App\Models\Comment;
 
 class IssueTest extends TestCase
 {
@@ -16,7 +18,7 @@ class IssueTest extends TestCase
     public function test_issue_create()
     {
         $formData = [
-            'title' => 'power lost',
+            'title' => 'power',
             'body' => 'emergency power cut',
             'uuid' => 'abc123',
             'slug' => 'sdcdsas',
@@ -69,14 +71,17 @@ class IssueTest extends TestCase
 
     public function test_issue_get() 
     {
-        $this->get(route('select.issue', 9))->assertStatus(200);
+        $issue = Issue::max('id');
+        $this->get(route('select.issue', $issue))->assertStatus(200);
     }
 
     public function test_issuse_delete() {
-        $this->delete(route('delete.issue', 5))->assertStatus(200);
+        $issue = Issue::max('id');
+        $this->delete(route('delete.issue', $issue))->assertStatus(200);
     }
 
     public function test_comment_delete() {
-        $this->delete(route('delete.comment', 6))->assertStatus(200);
+        $comment = Comment::max('id');
+        $this->delete(route('delete.comment', $comment))->assertStatus(200);
     }
 }
