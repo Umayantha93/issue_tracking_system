@@ -48,4 +48,29 @@ class TrackingController extends Controller
             ]);
         }
      }
+
+        //create issue
+    public function createIssue(Request $request)
+    {
+        
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+            'uuid' => 'required',
+            'slug' => 'required',
+        ]);
+        
+        if ($request) {
+
+            $data = TrackingRepository::postIssue($request);
+            return response()->json([
+                'message' => "Issue Entered Successfully"
+            ]);
+        } else {
+            return response()->json([
+                'message' => "Validation Fails"
+            ]);    
+        }
+        
+    }
 }
