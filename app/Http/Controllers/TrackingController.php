@@ -58,6 +58,8 @@ class TrackingController extends Controller
             'body' => 'required',
             'uuid' => 'required',
             'slug' => 'required',
+            'category_id' => 'required',
+            'subcategory_id' => 'required'
         ]);
         
         if ($request) {
